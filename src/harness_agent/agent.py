@@ -1,14 +1,24 @@
-from agents import Agent, Runner, function_tool, set_default_openai_client, set_default_openai_api
-from openai import AsyncOpenAI
-import subprocess
+import asyncio
 import os
+import subprocess
+
+from agents import (
+    Agent,
+    Runner,
+    SQLiteSession,
+    function_tool,
+    set_default_openai_api,
+    set_default_openai_client,
+)
+from openai import AsyncOpenAI
+
 
 # --- 核心工具 (由 PBH 协议驱动) ---
 @function_tool
 def read_agents_md() -> str:
     """读取项目根目录的 AGENTS.md 文件，理解协作规则。"""
     try:
-        with open("AGENTS.md", "r", encoding="utf-8") as f:
+        with open("AGENTS.md", encoding="utf-8") as f:
             return f.read()
     except FileNotFoundError:
         return "错误：未找到 AGENTS.md，请确认项目已由 PBH 初始化。"
@@ -55,6 +65,36 @@ architect = Agent(
     tools=[read_agents_md, run_make_verify]
 )
 
+# --- 交互式对话模式 ---
+EXIT_COMMANDS = {"quit", "exit", "q"}
+
+
+async def chat_loop(session_id: str = "default") -> None:
+    """启动 Architect 交互式对话循环，支持多轮对话和记忆保持。"""
+    session = SQLiteSession(session_id)
+    print("=== Harness Agent Architect ===")
+    print("输入问题开始对话，输入 quit/exit/q 退出\n")
+
+    while True:
+        try:
+            user_input = input("You: ").strip()
+        except (EOFError, KeyboardInterrupt):
+            print("\n再见！")
+            break
+
+        if not user_input:
+            continue
+        if user_input.lower() in EXIT_COMMANDS:
+            print("再见！")
+            break
+
+        try:
+            result = await Runner.run(architect, user_input, session=session)
+            print(f"\nArchitect: {result.final_output}\n")
+        except Exception as e:
+            print(f"\n错误: {e}\n")
+
+
 # --- 运行示例 (最小可行闭环) ---
 async def main():
     user_input = "Harness-Lint 刚才报告了 3 个违规。请读取 AGENTS.md 并分析可能的原因。"
@@ -63,6 +103,6 @@ async def main():
     print("Architect 分析结论:")
     print(result.final_output)
 
+
 if __name__ == "__main__":
-    import asyncio
-    asyncio.run(main())
+    asyncio.run(chat_loop())

@@ -4,7 +4,7 @@
 **核心定位**：PBH 协议驱动的自主代码修复代理  
 **技术栈**：Python + OpenAI Agents SDK + MiMo-V2.5-Pro  
 **设计日期**：2026-05-12  
-**状态**：Phase 0 完成（最小可行闭环），Phase 1 待启动
+**状态**：Phase 0 完成（最小可行闭环），Phase 1 完成（交互式对话升级）
 
 ---
 
@@ -129,12 +129,12 @@ CI/Harness-Lint 报告问题
 - [x] **自举验证**：Agent 用 Harness-Lint 检查了自身代码，发现了 I001/UP015/W292 违规，并基于 AGENTS.md §5 进行了归因分析
 - [x] 推送 GitHub 仓库
 
-### Phase 1：交互式对话升级 🔴 当前目标
+### Phase 1：交互式对话升级 ✅ 已完成
 
-- [ ] 增加 `chat_loop()` 函数，让 Architect 支持多轮对话
-- [ ] 保持对话历史（记忆），避免上下文丢失
-- [ ] 修复 Architect 自身代码的 3 个 lint 违规（make fix → make verify）
-- [ ] 编写基本的单元测试
+- [x] 增加 `chat_loop()` 函数，让 Architect 支持多轮对话
+- [x] 保持对话历史（记忆），避免上下文丢失（使用 SQLiteSession）
+- [x] 修复 Architect 自身代码的 3 个 lint 违规（make fix → make verify）
+- [x] 编写基本的单元测试（19 个测试，覆盖率 98%）
 
 ### Phase 2：执行者引入 🟡 待启动
 

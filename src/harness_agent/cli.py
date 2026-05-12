@@ -1,6 +1,10 @@
 """CLI entry point for the generated project."""
 
+import asyncio
+
 import typer
+
+from harness_agent.agent import chat_loop
 
 app = typer.Typer()
 
@@ -9,6 +13,13 @@ app = typer.Typer()
 def hello(name: str = typer.Argument("World")) -> None:
     """Print a greeting message."""
     typer.echo(f"Hello, {name}!")
+
+
+@app.command()
+def chat(session_id: str = typer.Argument("default")) -> None:
+    """Start interactive chat with Architect agent."""
+    typer.echo(f"Starting chat session: {session_id}")
+    asyncio.run(chat_loop(session_id))
 
 
 def version_callback(value: bool) -> None:

@@ -19,6 +19,7 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "pytest>=7.0",
+    "pytest-asyncio>=0.21.0",
     "pytest-cov>=4.0",
     "ruff>=0.1.0",
 ]
@@ -33,6 +34,20 @@ where = ["src"]
 testpaths = ["tests"]
 pythonpath = ["src"]
 addopts = "-v --cov=src --cov-fail-under=85"
+asyncio_mode = "auto"
+
+[tool.coverage.run]
+omit = [
+    "src/harness_agent/agent.py:17-39",  # Tool functions wrapped by decorator
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "if __name__ == .__main__.",
+    "raise RuntimeError",
+    "@function_tool",
+]
 
 [tool.ruff]
 line-length = 100
