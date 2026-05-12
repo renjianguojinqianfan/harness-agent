@@ -4,9 +4,9 @@
 
 ## 1. Project Snapshot
 
-**harness-agent** — 
+**harness-agent** — PBH 协议驱动的自主代码修复代理。当 CI 或 Harness-Lint 报告问题时，自动读取 AGENTS.md 诊断并尝试修复。
 
-**Maintainer**: harness-init
+**Maintainer**: renjianguojinqianfan
 **Type**: cli
 
 ## 2. Quick Start (30 seconds)

@@ -5,14 +5,15 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "harness-agent"
 version = "0.1.0"
-description = "A Harness Engineering project"
+description = "PBH 协议驱动的自主代码修复代理"
 readme = "README.md"
 requires-python = ">=3.11"
 authors = [
-    {name = "harness-init", email = "harness-init@example.com"},
+    {name = "renjianguojinqianfan", email = "1419314553@qq.com"},
 ]
 dependencies = [
     "typer>=0.9.0",
+    "openai-agents",
 ]
 
 [project.optional-dependencies]
@@ -23,7 +24,7 @@ dev = [
 ]
 
 [project.scripts]
-"harness_agent" = "harness_agent.cli:cli"
+"harness-agent" = "harness_agent.cli:cli"
 
 [tool.setuptools.packages.find]
 where = ["src"]
